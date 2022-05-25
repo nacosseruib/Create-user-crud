@@ -1,165 +1,106 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Create New Task') }}</div>
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="main-content" style="background: #F5FCFF">
 
-                    <div class="card-body">
-                        {{-- feedback --}}
+                <div class="page-content">
+                    <div class="container-fluid">
                         @includeIf('share.messageAlert')
-
-                      <form method="POST" action="{{ Route::has('task.store') ? Route('task.store') : '#' }}">
-                        @csrf
-                            <div class="row">
-                                <div class="col-md-5">
-                                    <label>Task Name <span class="text-danger">*<span></label>
-                                    <input type="text" name="taskName" value="{{old('taskName')}}" class="form-control" placeholder="Enter Task Name" />
-                                </div>
-                                <div class="col-md-5">
-                                    <label>Priority <span class="text-danger">*<span></label>
-                                <select name="priority" class="form-control">
-                                        <option value="" selected>Select</option>
-                                        <option value="3" {{old('priority') == 3 ? 'selected' : ''}}>Low</option>
-                                        <option value="2" {{old('priority') == 2 ? 'selected' : ''}}>Midium</option>
-                                        <option value="1" {{old('priority') == 1 ? 'selected' : ''}}>High</option>
-                                </select>
-                                </div>
-                                <div class="col-md-2" style="padding-top:8px;">
-                                    <br >
-                                    <button type="submit" class="btn btn-success">Submit</button>
-                                </div>
-                            </div>
-                        </form>
-                        <hr />
-                        <table class="table">
-                            <tr>
-                                <th>SN</th>
-                                <th>Task</th>
-                                <th>Priority</th>
-                                <th>Action</th>
-                            </tr>
-                            @if(isset($getTask) && $getTask)
-                                @foreach ($getTask as $key=>$value)
-                                    <tr>
-                                        <td>{{ ($key + 1)}}</td>
-                                        <td>{{ $value->task_name }}</td>
-                                        <td>
-                                            @if($value->priority == 3)
-                                                Low
-                                            @elseif($value->priority == 2)
-                                                Midium
-                                            @elseif($value->priority == 1)
-                                                High
-                                            @endif
-
-                                        </td>
-                                        <td>
-                                            <button type="button" class="btn-sm btn-danger" data-toggle="modal" data-target="#deleteTask{{$key}}">Delete</button>
-                                            <button type="button" class="btn-sm btn-info" data-toggle="modal" data-target="#editTask{{$key}}">Edit</button>
-                                        </td>
-                                    </tr>
-
-                                     <!-- edit Modal -->
-                                     <div class="modal fade" id="editTask{{$key}}" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" style="z-index: 10000000000;">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="staticBackdropLabel"><span class="fa fa-eye"></span> Edit Task</h5>
-                                                </div>
-                                                <form method="POST" action="{{ Route::has('task.update') ? Route('task.update', [$value->id]) : '#' }}">
-                                                    @csrf
-                                                    @method('PUT')
-                                                    {{-- <input type="hidden" name="_method" value="PUT"> --}}
-                                                <div class="modal-body">
-                                                    {{-- body --}}
-                                                    <div class="">
-                                                        <div class="row">
-                                                            <div class="col-12 mx-auto">
-                                                                        <div class="row">
-                                                                            <div class="col-md-6">
-                                                                                <label>Task Name <span class="text-danger">*<span></label>
-                                                                                <input type="text" name="taskName" value="{{ $value->task_name }}" class="form-control" placeholder="Enter Task Name" />
-                                                                            </div>
-                                                                            <div class="col-md-6">
-                                                                                <label>Priority <span class="text-danger">*<span></label>
-                                                                            <select name="priority" class="form-control">
-                                                                                    <option value="" selected>Select</option>
-                                                                                    <option value="3" {{$value->priority == 3 ? 'selected' : ''}}>Low</option>
-                                                                                    <option value="2" {{$value->priority == 2 ? 'selected' : ''}}>Midium</option>
-                                                                                    <option value="1" {{$value->priority == 1 ? 'selected' : ''}}>High</option>
-                                                                            </select>
-                                                                            <input type="hidden" name="recordID" value="{{$value->id}}" class="form-control"/>
-                                                                            </div>
-                                                                        </div>
-
-                                                            </div>
+                        <div align="right">
+                            <button type="button" class="addNewUser btn btn-success btn-sm mb-4 mt-3" style="border-radius:6px;" data-bs-toggle="modal" data-bs-target="#exampleModal">Add User</button>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-12 border-dark">
+                                <div class="card">
+                                    <div class="card-body" style="border:solid 2px #87CEFA"> {{--ADD8E6--}}
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <h4 class="card-title mb-4">List Users</h4>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="">
+                                                    <form class="app-search d-none d-lg-block">
+                                                        <div class="position-relative">
+                                                            <input type="text" class="form-control bg-white border border-grey border-2 text-dark" value="Search..." style="border-radius: 10px">
+                                                            <span class="fa fa-search"></span>
                                                         </div>
-                                                    </div>
-                                                    {{-- end body --}}
+                                                    </form>
                                                 </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                    <button type="submit" class="btn btn-success">Update</button>
-                                                </div>
-                                            </form>
                                             </div>
                                         </div>
-                                    </div>
-                                    <!--end edit Modal-->
 
-                                        <!-- delete Modal -->
-                                        <form action="{{ Route::has('task.destroy') ? Route('task.destroy', [$value->id]) : '#' }}" method="post">
-                                            @csrf
-                                            @method('DELETE')
-                                        <div class="modal fade" id="deleteTask{{$key}}" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" style="z-index: 10000000000;">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="staticBackdropLabel"><span class="fa fa-eye"></span> Delete Task</h5>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        {{-- body --}}
-                                                        <div class="">
-                                                            <div class="row">
-                                                                <div class="col-12 mx-auto">
-                                                                    <div class="card border-0 shadow rounded-3 my-0">
-                                                                        <div class="card-body p-2 p-sm-3 m-1" style="overflow: auto; max-height: 300px;">
-                                                                            <div class="text-danger text-center">
-                                                                                <div class="p-1 text-dark">{{ $value->task_name }}</div>
-                                                                               <span> Are you sure you want to delete this task?</span>
-                                                                            </div>
+                                        <div class="table-responsive">
+                                            <table class="table table-centered table-nowrap mb-0">
+                                                <thead class="thead-light" style="background: #F5FCFF;">
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <th></th>
+                                                        <th>Create Date</th>
+                                                        <th>Role</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+
+                                                <tbody>
+                                                    @if(isset($userList) && $userList)
+                                                        @foreach ($userList as $key=>$user)
+                                                            <tr>
+                                                                <td>
+                                                                    <div class="d-flex align-items-center">
+                                                                        <div class="avatar-xs">
+                                                                            <span class="avatar-title bg-primary rounded-circle bg-primary font-size-20 mini-stat-icon">
+                                                                                <i class="mdi mdi-camera"></i>
+                                                                            </span>
+                                                                        </div>
+                                                                        <div class="flex-grow-1 ms-3">
+                                                                            <strong>{{$user->fisrtname .' '. $user->lastname}}
+                                                                            <div><small>{{$user->email}}</small></div>
                                                                         </div>
                                                                     </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        {{-- end body --}}
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                        <button type="submit" class="btn btn-danger" class="btn btn-danger">Delete</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        </form>
-                                    <!--end delete Modal-->
+                                                                </td>
+                                                                <td>
+                                                                    <span class="badge rounded-pill badge-soft-{{$user->bg_color}} font-size-12 p-2">{{$user->role_name}}</span>
+                                                                </td>
+                                                                <td>{{ date('d M, Y', strtotime($user->created_at)) }}</td>
+                                                                <td>
+                                                                    {{$user->employee_id}}
+                                                                </td>
+                                                                <td>
+                                                                    <div class="d-flex">
+                                                                        {{-- --}}
+                                                                        <button type="button" id="{{$user->id}}" class="getRecordID btn btn-default btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal" ><span class="fa fa-edit"></span></button>
+                                                                        <button type="button" id="{{$user->id}}" class="getUserDetails btn btn-default btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" ><span class="fa fa-trash"></span></button>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
 
-                                @endforeach
-                            @endif
-                        </table>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <hr />
-                                {!! (isset($getTask) && $getTask ? $getTask->links() : '') !!}
-                            </div>
+                                                        @endforeach
+                                                    @endif
+
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div><!-- end card-body -->
+                                </div><!-- end card -->
+                            </div><!-- end col -->
+
+
                         </div>
-                    </div>
+
+                    </div><!-- end col -->
+
+                </div><!-- end row -->
             </div>
-        </div>
-    </div>
-</div>
+            <!-- End Page-content -->
+
+    {{-- Delete modal --}}
+    @includeIf('share.deleteModal', ['title'=>'Delete User', 'modalName'=>'deleteModal', 'message'=>'Are you sure you want to delete this user?' ])
+
+    {{-- Edit or Add modal --}}
+    @includeIf('share.userModalForm', ['title'=>'Add User', 'modalName'=>'exampleModal', 'user'=>null, 'formAction'=>'store'])
+
 @endsection

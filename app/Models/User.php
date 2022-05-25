@@ -22,16 +22,15 @@ class User extends Authenticatable
 
 
     protected $fillable = [
-        'username',
+        'firstname',
+        'lastname',
         'email',
+        'employee_id',
+        'mobile',
+        'role_type',
+        'username',
         'password',
-        'status',
-        'suspended',
-        'last_login',
-        'current_login',
-        'user_token',
-        'social_id',
-        'social_type'
+        'status'
     ];
 
     /**
@@ -53,16 +52,3 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 }
-
-
-// $table->increments('id');
-// $table->string('name', 32);
-// $table->string('username', 32);
-// $table->string('email', 320);
-// $table->string('password', 64);
-// $table->string('role', 32);
-// $table->string('confirmation_code');
-// $table->boolean('confirmed')->default(true);
-// $table->timestamps();
-
-// $table->unique('email', 'users_email_uniq');

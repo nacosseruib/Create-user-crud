@@ -14,11 +14,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Route::get('/',             'TaskManagementController@index')->name('index');
-Route::resource('task',     'TaskManagementController');
+Route::get('/',                     'UserController@index')->name('index');
+Route::resource('user',             'UserController');
+Route::post('/user/delete',         'UserController@destroy')->name('destroy');
 
 Auth::routes();
-Route::get('/home',         [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-//saveTask
 
